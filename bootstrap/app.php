@@ -12,14 +12,16 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
-         $middleware->web(append: [
-        \Stancl\Tenancy\Middleware\InitializeTenancyByDomain::class,
-    ]);
-    
-    $middleware->api(append: [
-        \Stancl\Tenancy\Middleware\InitializeTenancyByDomain::class,
-    ]);
+        // Tenancy middleware disabled temporarily for development
+        // We will re-enable when ready to test tenant domains (Day 8-9)
+        
+        // $middleware->web(append: [
+        //     \Stancl\Tenancy\Middleware\InitializeTenancyByDomain::class,
+        // ]);
+        
+        // $middleware->api(append: [
+        //     \Stancl\Tenancy\Middleware\InitializeTenancyByDomain::class,
+        // ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
