@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Blade;  // Add this for Blade directive
+use App\Services\FeatureService;        // Add this for FeatureService
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -30,5 +33,9 @@ public function boot(): void
             $this->loadRoutesFrom($routesPath);
         }
     }
+
+        Blade::if('feature', function ($featureKey) {
+        return app(FeatureService::class)->isEnabled($featureKey);
+    });
 }
 }
