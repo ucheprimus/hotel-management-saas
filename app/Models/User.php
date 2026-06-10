@@ -3,32 +3,63 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;  // Add this line
-use Spatie\Permission\Traits\HasRoles;  // Add this line
+use Spatie\Permission\Traits\HasRoles;
+use Laravel\Sanctum\HasApiTokens;
 
-#[Fillable(['name', 'email', 'password'])]
-#[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable implements MustVerifyEmail  // Add MustVerifyEmail here
+class User extends Authenticatable implements MustVerifyEmail
 {
-    /** @use HasFactory<UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable, HasRoles;  // Add HasApiTokens here
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+    
+    // Tenant relationships
+    public function tenants()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->belongsToMany(Tenant::class, 'tenant_user', 'user_id', 'tenant_id')
+                    ->withPivot('role_in_tenant', 'is_current')
+                    ->withTimestamps();
+    }
+    
+    public function currentTenant()
+    {
+        return $this->belongsToMany(Tenant::class, 'tenant_user', 'user_id', 'tenant_id')
+                    ->wherePivot('is_current', true)
+                    ->first();
+    }
+    
+    public function switchTenant(Tenant $tenant)
+    {
+        // Reset all current flags
+        $this->tenants()->updateExistingPivot($this->tenants->pluck('id')->toArray(), ['is_current' => false]);
+        
+        // Set new current tenant
+        $this->tenants()->updateExistingPivot($tenant->id, ['is_current' => true]);
+        
+        // Initialize tenancy
+        tenancy()->initialize($tenant);
+        
+        return $this;
+    }
+    
+    public function belongsToTenant(Tenant $tenant): bool
+    {
+        return $this->tenants->contains($tenant);
     }
 }

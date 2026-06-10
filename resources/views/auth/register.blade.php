@@ -39,6 +39,18 @@
                    value="{{ old('email') }}" required placeholder="you@example.com">
         </div>
     </div>
+
+    <div class="mb-3">
+    <label class="form-label fw-semibold">Hotel Name</label>
+    <div class="input-group">
+        <span class="input-group-text bg-light border-end-0">
+            <i class="fas fa-building text-muted"></i>
+        </span>
+        <input type="text" name="hotel_name" class="form-control auth-input border-start-0 ps-0" 
+               value="{{ old('hotel_name') }}" required placeholder="My Awesome Hotel">
+    </div>
+    <small class="text-muted">This will be your hotel/business name</small>
+</div>
     
     <div class="mb-3">
         <label class="form-label fw-semibold">Password</label>
