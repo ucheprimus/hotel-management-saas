@@ -45,5 +45,39 @@ class HotelServiceProvider extends ServiceProvider
             \Modules\Hotel\Events\HotelDeleted::class,
             \Modules\Hotel\Listeners\LogHotelActivity::class
         );
+
+
+    // Hotel events
+    $this->app['events']->listen(
+        \Modules\Hotel\Events\HotelCreated::class,
+        \Modules\Hotel\Listeners\LogHotelActivity::class
+    );
+    
+    $this->app['events']->listen(
+        \Modules\Hotel\Events\HotelUpdated::class,
+        \Modules\Hotel\Listeners\LogHotelActivity::class
+    );
+    
+    $this->app['events']->listen(
+        \Modules\Hotel\Events\HotelDeleted::class,
+        \Modules\Hotel\Listeners\LogHotelActivity::class
+    );
+    
+    // Property events
+    $this->app['events']->listen(
+        \Modules\Hotel\Events\PropertyCreated::class,
+        \Modules\Hotel\Listeners\LogPropertyActivity::class
+    );
+    
+    $this->app['events']->listen(
+        \Modules\Hotel\Events\PropertyUpdated::class,
+        \Modules\Hotel\Listeners\LogPropertyActivity::class
+    );
+    
+    $this->app['events']->listen(
+        \Modules\Hotel\Events\PropertyDeleted::class,
+        \Modules\Hotel\Listeners\LogPropertyActivity::class
+    );
+
     }
 }
