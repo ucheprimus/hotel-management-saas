@@ -1,0 +1,14 @@
+{
+    "name": "Tenancy",
+    "alias": "tenancy",
+    "description": "Multi-tenancy module",
+    "keywords": [],
+    "active": 1,
+    "order": 2,
+    "providers": [
+        "Modules\\Tenancy\\Providers\\TenancyServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

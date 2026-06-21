@@ -21,8 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Feature flag middleware alias
         $middleware->alias([
             'feature' => \App\Http\Middleware\EnsureFeatureEnabled::class,
-                'tenant.context' => \App\Http\Middleware\EnsureTenantContext::class,
-
+            'tenant.context' => \App\Http\Middleware\EnsureTenantContext::class,
         ]);
         
         // Tenancy middleware disabled temporarily for development

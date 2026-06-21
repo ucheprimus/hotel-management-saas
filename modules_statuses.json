@@ -1,3 +1,6 @@
 {
-    "Tenancy": true
+    "Tenancy": true,
+    "Auth": true,
+    "Hotel": true,
+    "Booking": true
 }
